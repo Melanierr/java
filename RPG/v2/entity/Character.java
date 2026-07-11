@@ -1,51 +1,65 @@
 package entity;
 
-public class Character extends Entity{
-    boolean isDefend = false;
-    boolean isArmorEquipped = false;
-    double currentXP = 0;
-    double xpThreshold = 100;
-    Character(String name, int maxHp, int atk, int mana) {
+import item.*;
+
+public class Character extends Entity {
+    private boolean isDefend = false;
+    private Weapon equippedWeapon;
+    private Armor equippedArmor;
+    private double currentXP = 0;
+    private double xpThreshold = 100;
+    private int gold = 10;
+    public Character(String name, int maxHp, int atk, int mana) {
         super(name, maxHp, atk, mana);
     }
-    public void healSelf(int healAmount){
-        hp += healAmount;
-        if(hp > getMaxHp()){
-            hp = getMaxHp();
-        }
+    public void healSelf(int healAmount) {
+        this.hp = Math.min(this.hp + healAmount, getMaxHp());
     }
     @Override
-    public // I tried making an evade chance here but not pro enough
-    void attack(Entity target){
-        target.takeDamage(atk);
+    public void attack(Entity target) {
+        double calculatedDamage = this.atk;
+        if (equippedWeapon != null) {
+            calculatedDamage *= equippedWeapon.getDmgMultiplier();
+        }
+        target.takeDamage(calculatedDamage);
     }
+    @Override
+    public void takeDamage(double damage) {
+        double calculatedDmg = damage;
+        if (equippedArmor != null) {
+            calculatedDmg *= equippedArmor.getDefMultiplier();
+        }
+        if (isDefend) {
+            calculatedDmg *= 0.8;
+        }
+
+        this.hp -= calculatedDmg;
+    }
+    public void addXp(double xp) {
+        this.currentXP += xp;
+        while (this.currentXP >= xpThreshold) {
+            this.currentXP -= xpThreshold;
+            levelUp();
+        }
+    }
+
     void levelUp() {
         restoreHp();
-        level++;
-        xpThreshold *= 1.2;
+        this.level++;
+        this.xpThreshold *= 1.2;
     }
-    public void addXp(double xp){
-        this.currentXP += xp;
-        if(this.currentXP >= xpThreshold) {
-            levelUp();
-            currentXP = 0;
-        }
-        else{
-            System.out.println(currentXP + "/" + xpThreshold);
-        }
+    public int getGold(){ return gold; }
+    public void addGold(int gold) { this.gold += gold; }
+    public boolean isAlive() {
+        return this.hp > 0;
     }
-    void takeDamage(double damage){
-        if(isDefend){
-            hp -= 0.8 * damage;
-        }
-        else{
-            hp -= (int) damage;
-        }
-    }
-    public boolean isAlive(){
-        return hp > 0;
-    }
-    public void setDefend(boolean state){
+    public void setDefend(boolean state) {
         this.isDefend = state;
+    }
+    public void setArmorEquipped(Armor armorEquipped) {
+        this.equippedArmor = armorEquipped;
+    }
+    public void setWeaponEquipped(Weapon equippedWeapon) {
+        this.equippedWeapon = equippedWeapon;
     }
 }
