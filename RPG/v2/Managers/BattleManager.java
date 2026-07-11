@@ -9,6 +9,7 @@ public class BattleManager {
     private final Scanner scanner;
     private final entity.Character character;
     boolean isDefeated = false;
+    boolean isForfeit = false;
     ArrayList<Enemy> enemies = new ArrayList<>();
     ArrayList<Item> inventory;
     Random  rand = new Random();
@@ -20,7 +21,10 @@ public class BattleManager {
     public void run(){
         generateEnemy();
         System.out.println("Enemies appear!!");
-        boolean isForfeit = false;
+        for (int i = 0; i < enemies.size(); i++) {
+            System.out.println(i + " " + enemies.get(i).toString());
+        }
+        System.out.println(character);
         do {
             System.out.println("Choose an option:\n1.Attack\n2.Defend\n3.Use Item\n4.Forfeit");
             String option = scanner.nextLine();
@@ -44,37 +48,42 @@ public class BattleManager {
                     character.setDefend(true);
                 }
                 case "3" -> {
-                    // not implemented yet
+                    InventoryManager inv = new InventoryManager(scanner, inventory, character);
+                    inv.run(true);
                     }
                 case "4" -> isForfeit = true;
+                default -> {
+                    System.out.println("Invalid option.");
+                    continue;
+                }
             }
-            randomEnemiesAttack();
-            if(!character.isAlive()){
-                isForfeit = true;
+            if(!isForfeit && !isDefeated) {
+                randomEnemiesAttack();
+                if (!character.isAlive()) {
+                    isDefeated = true;
+                }
+                updateBattlefield();
+                character.setDefend(false);
             }
-            updateBattlefield();
-            character.setDefend(false);
             if(enemies.isEmpty()){
                 System.out.println("Victory! ⚔️🔥");
                 break;
             }
-        }while(!isForfeit);
+
+        }while(!isForfeit && !isDefeated);
 
     }
     void generateEnemy() {
         enemies.clear();
         enemies.add(new Enemy("Goblin Thief", 100, 15));
-        enemies.add(new Enemy("Slime", 80, 5));
+        /* enemies.add(new Enemy("Slime", 80, 5));
         enemies.add(new Enemy("Fire Dragon", 350, 20));
-        enemies.add(new Enemy("Ninja", 130, 25));
+        enemies.add(new Enemy("Ninja", 130, 25)); */
     }
     void randomEnemiesAttack(){
         int randomChoice =  rand.nextInt(enemies.size());
         if(enemies.get(randomChoice).isAlive()) {
             enemies.get(randomChoice).attack(character);
-        }
-        else{
-            randomEnemiesAttack();
         }
     }
     void updateBattlefield(){
@@ -84,8 +93,17 @@ public class BattleManager {
                 double gainedXp = enemies.get(i).getMaxHp() * 0.75;
                 System.out.printf("%s received %.1f XP.\n", character.getName(), gainedXp);
                 character.addXp(gainedXp);
+                Item droppedItem = generateLoot();
+                System.out.println(enemies.get(i).getName() + " dropped " +  droppedItem.getName() + "x" + droppedItem.getAmount());
+                inventory.add(droppedItem);
+                character.addGold(rand.nextInt(20, 51));
                 enemies.remove(i);
             }
         }
     }
+    Item generateLoot(){ // imaginge a randomized list
+        Item lootdrop = new Potion("Potion of Healing", "", 1, 75);
+        return lootdrop;
+    }
+
 }
