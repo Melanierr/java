@@ -6,12 +6,15 @@ public class Weapon extends Item{
         super(name, description, amount);
         this.dmgMultiplier = dmgMultiplier;
     }
-    double getDmgMultiplier(){
-        return dmgMultiplier;
+    public double getDmgMultiplier(){
+        return 1 + dmgMultiplier / 100;
     }
     @Override
     public void useItem(entity.Character player) {
-        System.out.println(this.name +" equipped! Buffed atk by " + getDmgMultiplier());
-        this.amount -= 1;
+        System.out.println(this.name +" equipped! ATK increased " + getDmgMultiplier() + "%");
+        player.setWeaponEquipped(this);
+    }
+    public String toSaveString() {
+        return "Weapon," + getName() + "," + getAmount() + "," + getDmgMultiplier();
     }
 }
