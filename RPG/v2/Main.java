@@ -9,6 +9,7 @@ public class Main {
         ArrayList < Entity > mobs = new ArrayList < > ();
         Scanner scanner = new Scanner(System.in);
         CharacterManager charManager = new CharacterManager(scanner);
+        DataSaver saveGame = new DataSaver();
         boolean isExit = false;
         while (!isExit) {
             System.out.println("========================");
@@ -16,7 +17,8 @@ public class Main {
             System.out.println("""
             1. Character
             2. Battle
-            3. Exit""");
+            3. Exit
+            4. Load save""");
             String mode = scanner.nextLine();
             switch (mode) {
                 case "1" -> charManager.run();
@@ -28,14 +30,19 @@ public class Main {
                         charManager.runBattle();
                     }
                 }
-                case "3" -> isExit = true;
+                case "3" -> {
+                    isExit = true;
+                    saveGame.saveData(charManager.getInventory(), charManager.getCharacter());
+                }
+                case "4" -> { // load save
+                    saveGame.loadData();
+                    charManager.loadCharacter(saveGame.name, saveGame.className, saveGame.level, saveGame.gold, saveGame.tempInventory);
+                }
                 default -> {
-                    System.out.println("Invalid input");
-                    continue;
+                    System.out.println("Invalid option");
                 }
             }
         }
-
         scanner.close();
     }
 }
