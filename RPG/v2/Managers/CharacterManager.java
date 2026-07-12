@@ -41,22 +41,42 @@ public class CharacterManager {
                     inv.run(false);
                 }
                 case "4" -> isExit = true;
-                default -> {
-                    System.out.println("Invalid option");
-                }
+                default -> System.out.println("Invalid option");
             }
         }
     }
     void createChar(String characterName, String characterClass) {
         switch (characterClass) {
-            case "1" -> this.character = new Knight(characterName);
-            case "2" -> this.character = new Archer(characterName);
-            case "3" -> this.character = new Mage(characterName);
+            case "1", "Knight" -> {
+                this.character = new Knight(characterName);
+                character.setClass("Knight");
+            }
+            case "2", "Archer" -> {
+                this.character = new Archer(characterName);
+                character.setClass("Archer");
+            }
+
+            case "3", "Mage" -> {
+                this.character = new Mage(characterName);
+                character.setClass("Mage");
+            }
+
             default -> System.out.println("Invalid character class");
         }
     }
     public entity.Character getCharacter() {
         return character;
+    }
+    public ArrayList<Item> getInventory() {
+        return inventory;
+    }
+    public void loadCharacter(String characterName, String charClass, int level, int gold, ArrayList<Item> tempInventory) {
+        createChar(characterName, charClass);
+        character.setGold(gold);
+        for(int i=0; i<level; i++){
+            character.levelUp();
+        }
+        this.inventory.addAll(tempInventory);
     }
     public void runBattle(){
         BattleManager BattleConsole = new BattleManager(character, inventory, scanner);
