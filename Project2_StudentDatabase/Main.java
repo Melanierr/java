@@ -33,8 +33,8 @@ public class Main {
                 case "3" -> studentManager.searchStudent();
                 case "4" -> studentManager.editStudent();
                 case "5" -> studentManager.removeStudent();
-                case "6" -> dataTask.saveList();
-                 case "7" -> studentManager.loadStudentList(dataTask.loadList());
+                case "6" -> dataTask.save();
+                 case "7" -> studentManager.loadStudentList(dataTask.load(), dataTask.currentCount);
                 case "8" -> isExit = true;
                 default -> System.out.println("The system does not support the feature.");
             }
