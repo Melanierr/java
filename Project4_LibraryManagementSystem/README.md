@@ -77,9 +77,3 @@ This is a **learning project**, so the focus was not on GUI design or databases.
 
 One of the biggest challenges was correctly restoring **loan relationships and book availability after loading saved data**, which required reconnecting `Book`, `Member`, and `Loan` objects instead of treating them as independent records.
 
----
-
-## Author
-
-**Musc / Melanierr**
-Built while learning Java through progressively larger console projects.
