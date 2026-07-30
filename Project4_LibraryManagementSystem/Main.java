@@ -74,7 +74,13 @@ public class Main {
                             case "3" -> {
                                 System.out.print("Enter name: ");
                                 String userInput1 = sc.nextLine();
-                                System.out.println(manager.searchMember(userInput1));
+                                if(manager.searchMember(userInput1) != null){
+                                    System.out.println(manager.searchMember(userInput1));
+                                }
+                                else{
+                                    System.out.println("Member not found.");
+                                }
+
                             }
                             case "4" -> manager.viewLoanList();
                             case "5" -> {
