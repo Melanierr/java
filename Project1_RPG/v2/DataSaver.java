@@ -15,7 +15,7 @@ public class DataSaver { // requests inventory, character
     int gold;
     ArrayList<Item> tempInventory = new ArrayList<>();
     public void saveData(ArrayList<Item> inventory, entity.Character character) {
-        try(FileWriter writer = new FileWriter("C:\\Users\\Musc\\Desktop\\saved_data.txt")) {
+        try(FileWriter writer = new FileWriter("saved_data.txt")) {
             writer.write("Name=" + character.getName() + "\n");
             writer.write("Class=" + character.getCurrentClass() + "\n");
             writer.write("Level=" + character.getLevel() + "\n");
@@ -29,7 +29,7 @@ public class DataSaver { // requests inventory, character
         }
     }
     public void loadData(){
-        try(BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Musc\\Desktop\\saved_data.txt"))){
+        try(BufferedReader reader = new BufferedReader(new FileReader("saved_data.txt"))){
             while((line = reader.readLine()) != null){
                 line = line.trim();
                 if(line.contains("=")){
