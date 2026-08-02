@@ -54,7 +54,7 @@ public class InventoryManager {
     public Item searchItemID(String id){
         if(inventory.isEmpty()){
             System.out.println("Inventory is empty.");
-            return;
+            return null;
         }
         for(Item item : inventory){
             if(item.getId().equalsIgnoreCase(id)){
