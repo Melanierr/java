@@ -19,8 +19,8 @@ public class InventorySave {
                 String[] lineParts = line.split(",");
                 String itemName = lineParts[0];
                 String itemType = lineParts[1];
-                double price = Double.parseDouble(lineParts[3]);
-                int amount = Integer.parseInt(lineParts[4]);
+                double price = Double.parseDouble(lineParts[2]);
+                int amount = Integer.parseInt(lineParts[3]);
                 Item newItem = new Item(itemName, itemType, amount, price);
                 items.add(newItem);
             }
