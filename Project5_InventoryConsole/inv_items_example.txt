@@ -1,0 +1,6 @@
+Potion of Healing,Consumables,50.0,8
+Potion of Strength,Consumables,75.0,3
+Apple,Consumables,5.0,12
+Gold,Money,10,250
+Wood Planks,Material,2.5,32
+Sword,Weapon,100.0,2
