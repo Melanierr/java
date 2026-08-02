@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class InventoryManager {
@@ -75,17 +76,49 @@ public class InventoryManager {
         }
         return null;
     }
+    public void sortItem(String sortType){
+        switch(sortType){
+            case "name" -> getInventory().sort(Comparator.comparing(Item::getName));
+            case "amount" -> getInventory().sort(Comparator.comparingInt(Item::getAmount));
+            case "price" -> getInventory().sort(Comparator.comparingDouble(Item::getPrice));
+        }
+        viewInventory();
+    }
+    /* public void viewByType(String type){ old version
 
+        ArrayList<Item> tempList = new ArrayList<>();
+        for(Item item : inventory){
+            if(item.getType().equalsIgnoreCase(type)){
+                tempList.add(item);
+            }
+        }
+        for(Item item : tempList){
+            System.out.println(item);
+        }
+    } */
+    public void viewByType(String type){ // new version
+        boolean found = false;
+        for(Item item : inventory){
+            if(item.getType().equalsIgnoreCase(type)){
+                System.out.println(item);
+                found = true;
+            }
+        }
+        if(!found){
+            System.out.println("No items found in this category.");
+        }
+    }
 
-    public void viewInventory(){
+    public boolean viewInventory(){
         if(inventory.isEmpty()){
             System.out.println("Inventory is empty.");
-            return;
+            return false;
         }
         for(Item item : inventory){
             System.out.println(item);
             System.out.println();
         }
+        return true;
     }
     public ArrayList<Item> getInventory(){
         return inventory;
