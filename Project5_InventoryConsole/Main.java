@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
@@ -15,11 +16,25 @@ public class Main {
                     4.Delete item
                     5.Save inventory
                     6.Load new inventory
-                    7.Exit
+                    7.Sort inventory
+                    8.Exit
                     Choose an option:\s""");
             String option = sc.nextLine();
             switch (option) {
-                case "1" -> inv.viewInventory();
+                case "1" -> {
+                    boolean viewed = inv.viewInventory();
+                    if(viewed){
+                        System.out.println("Enter R to open sort mode.\nEnter F to view by type.\nEnter anything else to quit.");
+                        if(sc.nextLine().equalsIgnoreCase("r")){
+                            System.out.print("Sort by? (Name/Amount/Price) ");
+                            inv.sortItem(sc.nextLine());
+                        }
+                        if(sc.nextLine().equalsIgnoreCase("f")){
+                            System.out.print("Enter type of item: ");
+                            inv.viewByType(sc.nextLine().trim());
+                        }
+                    }
+                }
                 case "2" -> {
                     System.out.print("Enter item's name: ");
                     String userInput = sc.nextLine().trim();
@@ -48,7 +63,35 @@ public class Main {
                 }
                 case "5" -> save.saveInventory(inv.getInventory());
                 case "6" -> inv.setNewInv(save.loadInventory());
-                case "7" -> isExit = true;
+                case "7" -> {
+                    System.out.println("Sort by? (Name/Amount/Price)");
+                    inv.sortItem(sc.nextLine().trim().toLowerCase());
+                }
+                case "8" -> isExit = true;
+                case "2026" -> { // secret
+                    boolean isDebugConsole = true;
+
+                    do{
+                        System.out.print("""
+                        Welcome to debug console
+                        Sort inventory list
+                        Choose an option:\s""");
+                        String choice = sc.nextLine();
+                        switch(choice) {
+                            case "1" -> {
+                                inv.getInventory().sort(
+                                        Comparator.comparingInt(Item::getAmount)
+                                                .reversed()
+                                );
+                                for(Item item : inv.getInventory()){
+                                    System.out.println(item);
+                                }
+                            }
+                            case "exit" -> isDebugConsole = false;
+                            default -> System.out.println("Invalid choice.");
+                        }
+                    }while(!isDebugConsole);
+                }
             }
         }
     }
