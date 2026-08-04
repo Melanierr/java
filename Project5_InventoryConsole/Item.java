@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Item {
     private String itemName;
     private String itemId;
@@ -6,16 +8,21 @@ public class Item {
     private int amount = 0;
     public static int maxStack = 32;
     private static int nextId = 1;
-
-
-    public Item(String itemName, String itemType, int amount, double itemPrice) {
+    private Random randomizer = new Random();
+    public Item(String itemName, String itemType, int amount) {
         this.itemName = itemName;
         this.itemType = itemType;
-        this.itemPrice = itemPrice;
+        this.itemPrice = randomizer.nextDouble(1, 51);
         this.amount = amount;
         this.itemId = "I" + String.format("%03d", nextId++);
     }
-
+    public Item(String itemName, String itemType, int amount, double price) {
+        this.itemName = itemName;
+        this.itemType = itemType;
+        this.itemPrice = price;
+        this.amount = amount;
+        this.itemId = "I" + String.format("%03d", nextId++);
+    }
     public void addAmount(int amount){
         this.amount += amount;
     }
