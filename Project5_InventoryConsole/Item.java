@@ -1,14 +1,14 @@
 import java.util.Random;
 
 public class Item {
-    private String itemName;
-    private String itemId;
-    private String itemType;
-    private double itemPrice;
-    private int amount = 0;
+    private final String itemName;
+    private final String itemId;
+    private final String itemType;
+    private final double itemPrice;
+    private int amount;
     public static int maxStack = 32;
     private static int nextId = 1;
-    private Random randomizer = new Random();
+    private static final Random randomizer = new Random();
     public Item(String itemName, String itemType, int amount) {
         this.itemName = itemName;
         this.itemType = itemType;
@@ -24,11 +24,18 @@ public class Item {
         this.itemId = "I" + String.format("%03d", nextId++);
     }
     public void addAmount(int amount){
+        if(amount < 0){
+            System.out.println("Cannot add negative amount.");
+            return;
+        }
         this.amount += amount;
     }
     public boolean deleteAmount(int amount){
         if(amount > this.amount){
             return false;
+        }
+        if(amount < 0){
+            this.amount = 0;
         }
         this.amount -= amount;
         return true;
