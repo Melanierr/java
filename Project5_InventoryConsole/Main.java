@@ -1,10 +1,9 @@
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        InventoryManager inv = new InventoryManager(sc);
+        InventoryManager inv = new InventoryManager();
         InventorySave save = new InventorySave();
         boolean isExit = false;
         while (!isExit) {
@@ -25,11 +24,12 @@ public class Main {
                     boolean viewed = inv.viewInventory();
                     if(viewed){
                         System.out.println("Enter R to open sort mode.\nEnter F to view by type.\nEnter anything else to quit.");
-                        if(sc.nextLine().equalsIgnoreCase("r")){
+                        String command = sc.nextLine().trim().toLowerCase();
+                        if(command.equals("r")){
                             System.out.print("Sort by? (Name/Amount/Price) ");
-                            inv.sortItem(sc.nextLine());
+                            inv.sortItem(sc.nextLine().trim().toLowerCase());
                         }
-                        if(sc.nextLine().equalsIgnoreCase("f")){
+                        else if(command.equals("f")){
                             System.out.print("Enter type of item: ");
                             inv.viewByType(sc.nextLine().trim());
                         }
@@ -52,7 +52,7 @@ public class Main {
                     String userInput2  = sc.nextLine().trim();
                     System.out.print("Enter item amount: ");
                     int userInput3 =  sc.nextInt(); sc.nextLine();
-                    inv.addItem(userInput1, userInput2, userInput3, 10);
+                    inv.addItem(userInput1, userInput2, userInput3);
                 }
                 case "4" -> {
                     System.out.print("Enter item's name: ");
@@ -65,33 +65,9 @@ public class Main {
                 case "6" -> inv.setNewInv(save.loadInventory());
                 case "7" -> {
                     System.out.println("Sort by? (Name/Amount/Price)");
-                    inv.sortItem(sc.nextLine().trim().toLowerCase());
+                    inv.sortItem(sc.nextLine().trim());
                 }
                 case "8" -> isExit = true;
-                case "2026" -> { // secret
-                    boolean isDebugConsole = true;
-
-                    do{
-                        System.out.print("""
-                        Welcome to debug console
-                        Sort inventory list
-                        Choose an option:\s""");
-                        String choice = sc.nextLine();
-                        switch(choice) {
-                            case "1" -> {
-                                inv.getInventory().sort(
-                                        Comparator.comparingInt(Item::getAmount)
-                                                .reversed()
-                                );
-                                for(Item item : inv.getInventory()){
-                                    System.out.println(item);
-                                }
-                            }
-                            case "exit" -> isDebugConsole = false;
-                            default -> System.out.println("Invalid choice.");
-                        }
-                    }while(!isDebugConsole);
-                }
             }
         }
     }
