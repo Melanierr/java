@@ -74,5 +74,6 @@ public class Main {
                  default -> System.out.println("Invalid selection");
              }
          }while (!isExit);
+        scanner.close();
     }
 }
