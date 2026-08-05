@@ -119,5 +119,6 @@ public class Main {
                 case "5" -> isExit = true;
             }
         }while(!isExit);
+        scanner.close();
     }
 }
