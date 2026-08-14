@@ -1,7 +1,6 @@
 import java.io.*;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 
 public class Saver {
@@ -9,7 +8,7 @@ public class Saver {
 
 
     public void save(HashMap<String, Contact> contactBook){
-        try(FileWriter fw = new FileWriter("savefile.txt");) {
+        try(FileWriter fw = new FileWriter("savefile.txt")) {
             for(Contact contact : contactBook.values()){
                 fw.write(contact.toSave()+"\n");
             }
