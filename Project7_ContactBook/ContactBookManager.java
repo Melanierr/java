@@ -57,10 +57,7 @@ public class ContactBookManager {
     }
     //sorting
     public ArrayList<Contact> viewSortedList(){
-        ArrayList<Contact> contacts = new ArrayList<>();
-        for(Contact contact: contactBook.values()){
-            contacts.add(contact);
-        }
+        ArrayList<Contact> contacts = new ArrayList<>(contactBook.values());
         contacts.sort(Comparator.comparing(Contact::getName));
         return contacts;
     }
