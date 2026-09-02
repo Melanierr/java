@@ -138,16 +138,14 @@ public class Main {
                                     System.out.println(category + " does not belong to " + type + " ,try again.");
                                     continue;
                                 }
+                                if(category.isBlank()){
+                                    category = tempPlaceholder.getCategory().name();
+                                }
                                 break;
                             } catch (IllegalArgumentException e) {
                                 System.out.println("Malformed string/number found, try again.");
                             }
                         }
-
-                    if(category.isBlank()){
-                        category = tempPlaceholder.getCategory().name();
-                    }
-
                     System.out.print("Amount: ");
                     String amount = scanner.nextLine();
                     if(amount.isBlank()){
