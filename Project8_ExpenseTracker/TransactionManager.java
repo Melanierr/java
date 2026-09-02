@@ -8,22 +8,27 @@ public class TransactionManager {
     private BigDecimal currentBalance;
 
     public TransactionManager() {
+        System.out.println("Manager is loading...");
         transactions = new HashMap<>();
         currentBalance = BigDecimal.ZERO;
     }
 
     // transaction handling
-    public void createTransaction(String description, Type type, BigDecimal amount){
-        Transaction newTransaction = new Transaction(description, type, amount);
+    public void createTransaction(String description, Type type, Category category, BigDecimal amount){
+        Transaction newTransaction = new Transaction(description, type, category, amount);
         transactions.put(newTransaction.getUUID(), newTransaction);
+        System.out.println("Successfully created transaction");
     }
+
     public void deleteTransaction(UUID id){
         if(!transactions.containsKey(id)){
             System.out.println("Transaction with id " + id + " not found");
             return;
         }
+        System.out.println("Transaction ID " + id + " deleted");
         transactions.remove(id);
     }
+
     public void editTransaction(UUID id, String... edits){
         Transaction tempTransaction = transactions.get(id);
         if(tempTransaction == null){
@@ -32,25 +37,21 @@ public class TransactionManager {
         }
         String newDescription = edits[0];
         Type newType = Type.valueOf(edits[1]);
-        BigDecimal newAmount = new BigDecimal(edits[2]);
-
-        if(newType == Type.EXPENSE){
-            newAmount = newAmount.negate();
-        }
+        Category newCategory = Category.valueOf(edits[2]);
+        BigDecimal newAmount = new BigDecimal(edits[3]);
 
         tempTransaction.setDescription(newDescription);
         tempTransaction.setType(newType);
-        tempTransaction.setAmount(newAmount);
+        tempTransaction.setCategory(newCategory);
+        tempTransaction.updateAmount(newAmount);
     }
+
     public ArrayList<Transaction> searchTransactionName(String name){
         name = name.toLowerCase();
         ArrayList<Transaction> transactions = new ArrayList<>();
         for(Transaction searching : this.transactions.values()){
             if(searching.getDescription().toLowerCase().contains(name)) {
                 transactions.add(searching);
-                // why contain? cuz like if they type only some keyword it can check, on cases that there are repeated keywords then I guess show the other results also
-                // but then another design appear because we only search for one transaction? oh, god ong im dying
-                // ok bro just return an arraylist of the results 🤔 It's finally fixed.
             }
         }
         return transactions;
@@ -65,6 +66,7 @@ public class TransactionManager {
     }
     public void viewSummary(){
         updateBalance();
+        tempListIndexing();
         System.out.println("You currently have " + transactions.size() + " transactions");
         System.out.println("Current balance: $ " + getCurrentBalance());
     }
@@ -84,7 +86,7 @@ public class TransactionManager {
     public ArrayList<Transaction> tempListIndexing(){
         ArrayList<Transaction> tempList = new ArrayList<>(transactions.values());
         for(int index=0; index<tempList.size(); index++){
-            System.out.println(index + ": " + tempList.get(index));
+            System.out.println(index + ": " + tempList.get(index).toString());
         }
         return tempList;
     }
