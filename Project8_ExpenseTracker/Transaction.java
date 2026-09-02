@@ -8,26 +8,23 @@ public class Transaction {
     private String description;
     private final LocalDate date;
     private BigDecimal amount;
+    private Category category;
 
-
-    public Transaction(String description, Type type, BigDecimal amount) {
+    public Transaction(String description, Type type, Category category, BigDecimal amount) {
         this.description = description;
         this.date = LocalDate.now();
         this.uuid = UUID.randomUUID();
         this.transactionType = type;
-        if (transactionType == Type.INCOME) {
-            this.amount = amount;
-        }
-        else if (transactionType == Type.EXPENSE) {
-            this.amount = amount.negate();
-        }
+        this.category = category;
+        updateAmount(amount);
     }
-    public Transaction(String description, UUID uuid, Type type, BigDecimal amount, LocalDate date) {
+    public Transaction(String description, UUID uuid, Type type, Category category, BigDecimal amount, LocalDate date) { // this one is to load
         this.uuid = uuid;
         this.description = description;
         this.date = date;
         this.transactionType = type;
-        this.amount = amount;
+        this.category = category;
+        updateAmount(amount);
     }
 
     // getters
@@ -46,28 +43,32 @@ public class Transaction {
     public Type getTransactionType() {
         return transactionType;
     }
-
+    public Category getCategory() {
+        return category;
+    }
     // setters
-    public void setAmount(BigDecimal amount) {
-        if(transactionType.getType().equals("income")){
-            this.amount = amount;
-        }
-        else if(transactionType.getType().equals("expense")){
-            this.amount = amount.negate();
+    public void updateAmount(BigDecimal amount) {
+        this.amount = amount.abs();
+        if(transactionType ==  Type.EXPENSE){
+            this.amount = this.amount.negate();
         }
     }
     public void setDescription(String description) {
         this.description = description;
     }
+    public void setCategory(Category category) {
+        this.category = category;
+    }
     public void setType(Type type) {
         this.transactionType = type;
+        updateAmount(this.amount);
     }
     // toStrings
     @Override
     public String toString(){
-        return String.format("Detail: %s, Type: %s, Date: %s%nMoney: $%s, ID: %s", getDescription(),  getTransactionType().name(), getDate(), getAmount(), getUUID().toString());
+        return String.format("Detail: %s, Type: %s [%s], Date: %s, Money: $%s, ID: %s", getDescription(),  getTransactionType().name(), getCategory(), getDate(), getAmount(), getUUID().toString());
     }
     public String toSave(){
-        return getDescription() + "," + getUUID().toString() + "," + getTransactionType().name() + "," + getAmount().toString() + "," + getDate().toString();
+        return getDescription() + "," + getUUID().toString() + "," + getTransactionType().name() + "," + getCategory() + "," + getAmount().toString() + "," + getDate().toString();
     }
 }
