@@ -29,23 +29,24 @@ public class DataSaver {
                 while ((line = br.readLine()) != null) {
                     try {
                         String[] data = line.split(",");
-                        if (data.length != 5) {
+                        if (data.length != 6) {
                             System.out.println("Malformed save format.");
                             continue;
                         }
                         String description = data[0];
                         UUID uuid = UUID.fromString(data[1]);
                         Type type = Type.valueOf(data[2]);
-                        BigDecimal amount = new BigDecimal(data[3]);
-                        LocalDate date = LocalDate.parse(data[4]);
-                        Transaction newTransaction = new Transaction(description, uuid, type, amount, date);
+                        Category category = Category.valueOf(data[3]);
+                        BigDecimal amount = new BigDecimal(data[4]);
+                        LocalDate date = LocalDate.parse(data[5]);
+                        Transaction newTransaction = new Transaction(description, uuid, type, category, amount, date);
                         transactions.put(uuid, newTransaction);
                     }
                     catch(DateTimeException error){
                         System.out.println("Malformed date format. Skipping.");
                     }
                     catch(IllegalArgumentException error){
-                        System.out.println("Malformed UUID format. Skipping.");
+                        System.out.println("Malformed data format. Skipping.");
                     }
                 }
 
