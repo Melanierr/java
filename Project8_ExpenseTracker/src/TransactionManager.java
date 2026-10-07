@@ -49,10 +49,9 @@ public class TransactionManager {
     }
 
     public ArrayList<Transaction> searchTransactionName(String name){
-        ArrayList<Transaction> transactions = this.transactions.values().stream()
+        return this.transactions.values().stream()
                 .filter(transaction -> transaction.getDescription().equalsIgnoreCase(name))
                 .collect(Collectors.toCollection(ArrayList::new));
-        return transactions;
     }
 
     // calculating
