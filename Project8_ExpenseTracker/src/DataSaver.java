@@ -11,7 +11,7 @@ public class DataSaver {
         System.out.println("Data saver is loading...");
     }
 
-    public void saveFile(ArrayList<Transaction> transactions){ // better to use the array then get the uuid when loading
+    public void saveFile(ArrayList<Transaction> transactions){
         try(FileWriter fw = new FileWriter("savefile.txt")){
             for(Transaction tr : transactions){
                 fw.write(tr.toSave());

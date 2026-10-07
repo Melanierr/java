@@ -1,7 +1,9 @@
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class TransactionManager {
     private HashMap<UUID, Transaction> transactions;
@@ -47,13 +49,9 @@ public class TransactionManager {
     }
 
     public ArrayList<Transaction> searchTransactionName(String name){
-        name = name.toLowerCase();
-        ArrayList<Transaction> transactions = new ArrayList<>();
-        for(Transaction searching : this.transactions.values()){
-            if(searching.getDescription().toLowerCase().contains(name)) {
-                transactions.add(searching);
-            }
-        }
+        ArrayList<Transaction> transactions = this.transactions.values().stream()
+                .filter(transaction -> transaction.getDescription().equalsIgnoreCase(name))
+                .collect(Collectors.toCollection(ArrayList::new));
         return transactions;
     }
 
@@ -90,4 +88,5 @@ public class TransactionManager {
         }
         return tempList;
     }
+
 }
