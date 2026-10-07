@@ -27,12 +27,12 @@ public class DataSaver {
         try(BufferedReader br = new BufferedReader(new FileReader("savefile.txt"))){
             String line;
                 while ((line = br.readLine()) != null) {
+                    String[] data = line.split(",");
+                    if (data.length != 6) {
+                        System.out.println("Malformed save format.");
+                        continue;
+                    }
                     try {
-                        String[] data = line.split(",");
-                        if (data.length != 6) {
-                            System.out.println("Malformed save format.");
-                            continue;
-                        }
                         String description = data[0];
                         UUID uuid = UUID.fromString(data[1]);
                         Type type = Type.valueOf(data[2]);
@@ -49,9 +49,7 @@ public class DataSaver {
                         System.out.println("Malformed data format. Skipping.");
                     }
                 }
-
         }
-
         catch(FileNotFoundException error){
             System.out.println("Cannot locate save file.");
         }
